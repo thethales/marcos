@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Aniversário Marcos</title>
+    <style>
+       
+    @keyframes shake {
+        0%, 100% {
+            transform: translateX(0);
+        }
+        25% {
+            transform: translateX(-5px);
+        }
+        50% {
+            transform: translateX(5px);
+        }
+        75% {
+            transform: translateX(-5px);
+        }
+    }
+
+    #addButton {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        z-index: 1;
+        cursor: pointer;
+        width: 50px;
+        height: 70px;
+        animation: shake 1s infinite;
+    }
+
+
+        canvas {
+            display: block;
+            background: #f0f0f0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+        #addButton {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1;
+            cursor: pointer;
+            width: 50px;
+            height: 70px;
+        }
+        #balloon {
+            position: fixed;
+            top: 90px;
+            right: 10px;
+            z-index: 2;
+            padding: 5px 10px;
+            background-color: #ffc107;
+            color: black;
+            border-radius: 5px;
+            font-weight: bold;
+            display: none;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Barrio&display=swap" rel="stylesheet">
+    <style>
+        #counter {
+            position: fixed;
+            top: 10px;
+            right: 80px;
+            z-index: 3;
+            background-color: #ffffff;
+            padding: 10px;
+            margin-top: 15px;
+            font-family: 'Barrio', sans-serif;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Barriecito&display=swap" rel="stylesheet">
+    <style>
+        #laserButton {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 4;
+            width: 50px;
+            height: 50px;
+            background-color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            border: none;
+            transition: transform 0.2s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('ask') === '1') {
+                const inputForm = document.createElement('div');
+                inputForm.style.position = 'fixed';
+                inputForm.style.top = '50%';
+                inputForm.style.left = '50%';
+                inputForm.style.transform = 'translate(-50%, -50%)';
+                inputForm.style.backgroundColor = '#fff';
+                inputForm.style.padding = '20px';
+                inputForm.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
+                inputForm.style.zIndex = '10';
+
+                const inputLabel = document.createElement('label');
+                inputLabel.innerText = 'Escolha um número';
+                inputLabel.style.fontFamily = 'Barrio, sans-serif';
+                inputLabel.style.fontSize = '24px';
+                inputLabel.style.display = 'block';
+                inputLabel.style.marginBottom = '10px';
+
+                const inputField = document.createElement('input');
+                inputField.type = 'number';
+                inputField.min = '1';
+                inputField.style.fontSize = '24px';
+                inputField.style.padding = '5px';
+
+                const submitButton = document.createElement('button');
+                submitButton.innerText = 'Vaaaai !';
+                submitButton.style.marginTop = '10px';
+                submitButton.style.marginLeft = '15px';
+                submitButton.style.padding = '10px 20px';
+                submitButton.style.borderRadius = '20px';
+                submitButton.style.fontSize = '20px';
+                submitButton.style.cursor = 'pointer';
+
+                submitButton.addEventListener('click', () => {
+                    const count = parseInt(inputField.value, 10);
+                    if (count > 500) {
+                        if (!confirm('Você tem certeza disso? Não quer um número menor?')) {
+                            return;
+                        }
+                    }
+                    if (count > 0) {
+                        for (let i = 0; i < count; i++) {
+                            addObject();
+                        }
+                        inputForm.style.display = 'none';
+                        document.getElementById('counter').style.display = 'block';
+                        document.getElementById('laserButton').style.display = 'block';
+                    }
+                });
+
+                inputForm.appendChild(inputLabel);
+                inputForm.appendChild(inputField);
+                inputForm.appendChild(submitButton);
+                document.body.appendChild(inputForm);
+            } else {
+                for (let i = 0; i < 20; i++) {
+                    addObject();
+                }
+            }
+
+          
+
+            addButton.addEventListener('click', () => {
+    const clickSound = document.getElementById('clickSound');
+    clickSound.play();
+    addObject();
+    balloon.style.display = 'block';
+    setTimeout(() => {
+        balloon.style.display = 'none';
+    }, 1000);
+});
+
+
+            document.getElementById('laserButton').addEventListener('mousedown', () => {
+                document.getElementById('laserButton').style.transform = 'scale(0.9)';
+            });
+
+            document.getElementById('laserButton').addEventListener('mouseup', () => {
+                document.getElementById('laserButton').style.transform = 'scale(1)';
+            });
+
+            document.getElementById('laserButton').addEventListener('click', () => {
+                const laserSound = document.getElementById('laserSound');
+                laserSound.play();
+                if (objects.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * objects.length);
+                    const targetObject = objects[randomIndex];
+                    const startX = addButton.getBoundingClientRect().right - 20;
+                    const startY = addButton.getBoundingClientRect().top + addButton.height / 2;
+                    const targetX = targetObject.x + targetObject.width / 2;
+                    const targetY = targetObject.y + targetObject.height / 2;
+
+                    animateLaser(startX, startY, targetX, targetY, targetObject);
+                }
+            });
+        });
+
+        function animateLaser(startX, startY, targetX, targetY, targetObject) {
+            let progress = 0;
+            const duration = 30; // Duration of laser animation
+
+            function drawLaser() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Draw all objects before drawing laser
+                objects.forEach(obj => {
+                    ctx.drawImage(image, obj.x, obj.y, obj.width, obj.height);
+                });
+
+                const currentX = startX + (targetX - startX) * (progress / duration);
+                const currentY = startY + (targetY - startY) * (progress / duration);
+
+                ctx.strokeStyle = 'red';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(startX, startY);
+                ctx.lineTo(currentX, currentY);
+                ctx.stroke();
+
+                if (progress < duration) {
+                    progress++;
+                    requestAnimationFrame(drawLaser);
+                } else {
+                    destroyObject(targetObject);
+                }
+            }
+
+            requestAnimationFrame(drawLaser);
+        }
+
+        function destroyObject(targetObject) {
+            const index = objects.indexOf(targetObject);
+            if (index > -1) {
+                objects.splice(index, 1);
+                createExplosionEffect(targetObject.x + targetObject.width / 2, targetObject.y + targetObject.height / 2);
+                updateCounter();
+            }
+        }
+    </script>
+    <button id="laserButton"  style="display: none;" title="Laser Button">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Laser-symbol.svg/620px-Laser-symbol.svg.png" alt="Laser Icon" style="width: 32px; height: 32px; ">
+    </button>
+    <div id="counter" style="display: none;">20 Marcos</div>
+    <img id="addButton" src="https://www.dropbox.com/scl/fi/4e8e0loo1yf80w09ysl3x/download__1___1_-removebg-preview.png?rlkey=lqw00bl3ca7r7ebgatd6re4or&st=9x1g6u1b&dl=1" alt="Adiciona Mais Marcos">
+    <div id="balloon">Mais Marcos!</div>
+    <canvas id="canvas"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const addButton = document.getElementById('addButton');
+        const balloon = document.getElementById('balloon');
+        canvas.width = document.documentElement.clientWidth;
+        canvas.height = document.documentElement.clientHeight;
+
+        const objects = [];
+        const gravity = 0.1;
+        const imageUrl = 'https://www.dropbox.com/scl/fi/4e8e0loo1yf80w09ysl3x/download__1___1_-removebg-preview.png?rlkey=lqw00bl3ca7r7ebgatd6re4or&st=9x1g6u1b&dl=1';
+        const image = new Image();
+        image.src = imageUrl;
+
+        let draggedObject = null;
+        let offsetX, offsetY;
+
+        // Text properties
+        let textX = canvas.width / 2;
+        let currentFontIndices = Array("Feliz Aniversário Marcos".length).fill(0);
+        const fonts = ["48px Barrio, sans-serif", "48px Barriecito, sans-serif"];
+        setInterval(() => {
+            currentFontIndices = currentFontIndices.map(index => (index + 1) % fonts.length);
+        }, 500);
+        
+        let textY = canvas.height / 4;
+        let textSpeedX = 2;
+        let textSpeedY = 2;
+        let draggedText = false;
+        let textOffsetX, textOffsetY;
+
+        image.onload = () => {
+            requestAnimationFrame(update);
+        };
+
+        function addObject() {
+            updateCounter();
+            const obj = {
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                width: 50,
+                height: 70,
+                speedX: (Math.random() - 0.5) * 5,
+                speedY: (Math.random() - 0.5) * 5
+            };
+            objects.push(obj);
+            createExplosionEffect(obj.x + obj.width / 2, obj.y + obj.height / 2);
+        }
+
+        function update() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw and update objects
+            objects.forEach(obj => {
+                ctx.drawImage(image, obj.x, obj.y, obj.width, obj.height);
+                if (obj !== draggedObject) {
+                    obj.speedY += gravity;
+                    obj.x += obj.speedX;
+                    obj.y += obj.speedY;
+
+                    // Bounce off the edges
+                    if (obj.x < 0 || obj.x + obj.width > canvas.width) {
+                        obj.speedX *= -1;
+                    }
+                    if (obj.y + obj.height > canvas.height) {
+                        obj.speedY *= -0.8;
+                        obj.y = canvas.height - obj.height;
+                    }
+                }
+            });
+
+            // Draw and update kinetic text
+            const characters = "Feliz Aniversário Marcos".split('');
+            let offsetX = textX - ctx.measureText("Feliz Aniversário Marcos").width / 2;
+            characters.forEach((char, index) => {
+                ctx.font = fonts[currentFontIndices[index]];
+                ctx.fillStyle = "#FF0000";
+                ctx.fillText(char, offsetX, textY);
+                offsetX += ctx.measureText(char).width;
+            });
+            
+
+            if (!draggedText) {
+                textX += textSpeedX;
+                textY += textSpeedY;
+
+                // Bounce the text off the edges
+                if (textX < 0 || textX > canvas.width) {
+                    textSpeedX *= -1;
+                }
+                if (textY < 50 || textY > canvas.height) {
+                    textSpeedY *= -1;
+                }
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        function updateCounter() {
+            const counter = document.getElementById('counter');
+            counter.innerText = `${objects.length} Marcos`;
+        }
+
+        function createExplosionEffect(x, y) {
+            const particles = [];
+            const particleCount = 30;
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    speedX: (Math.random() - 0.5) * 10,
+                    speedY: (Math.random() - 0.5) * 10,
+                    size: Math.random() * 5 + 2,
+                    alpha: 1
+                });
+            }
+
+            function animateExplosion() {
+                particles.forEach((particle, index) => {
+                    particle.x += particle.speedX;
+                    particle.y += particle.speedY;
+                    particle.alpha -= 0.02;
+                    ctx.fillStyle = `rgba(255, 165, 0, ${particle.alpha})`;
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    if (particle.alpha <= 0) {
+                        particles.splice(index, 1);
+                    }
+                });
+
+                if (particles.length > 0) {
+                    requestAnimationFrame(animateExplosion);
+                }
+            }
+
+            requestAnimationFrame(animateExplosion);
+        }
+    </script>
+    <audio id="clickSound" src="https://cdn.pixabay.com/download/audio/2023/04/07/audio_25f18a716c.mp3?filename=arcade-arped-145549.mp3" preload="auto"></audio>
+    <audio id="objectClickSound" src="https://cdn.pixabay.com/download/audio/2023/04/30/audio_9ae1edb2a3.mp3?filename=video-game-menu-click-sounds-148373.mp3" preload="auto"></audio>
+    <audio id="laserSound" src="https://cdn.pixabay.com/download/audio/2024/08/30/audio_68d83e5b2d.mp3?filename=retro-laser-1-236669.mp3" preload="auto"></audio>
+</body>
+</html>

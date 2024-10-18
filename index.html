@@ -1,37 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feliz Aniversário Marcos</title>
     <style>
-       
-    @keyframes shake {
-        0%, 100% {
-            transform: translateX(0);
-        }
-        25% {
-            transform: translateX(-5px);
-        }
-        50% {
-            transform: translateX(5px);
-        }
-        75% {
-            transform: translateX(-5px);
-        }
-    }
+        @keyframes shake {
 
-    #addButton {
-        position: fixed;
-        top: 10px;
-        right: 10px;
-        z-index: 1;
-        cursor: pointer;
-        width: 50px;
-        height: 70px;
-        animation: shake 1s infinite;
-    }
+            0%,
+            100% {
+                transform: translateX(0);
+            }
 
+            25% {
+                transform: translateX(-5px);
+            }
+
+            50% {
+                transform: translateX(5px);
+            }
+
+            75% {
+                transform: translateX(-5px);
+            }
+        }
+
+        #addButton {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1;
+            cursor: pointer;
+            width: 50px;
+            height: 70px;
+            animation: shake 1s infinite;
+        }
 
         canvas {
             display: block;
@@ -41,6 +45,7 @@
             left: 0;
             z-index: 0;
         }
+
         #addButton {
             position: fixed;
             top: 10px;
@@ -50,7 +55,10 @@
             width: 50px;
             height: 70px;
         }
-        #balloon {
+
+        #balloon,
+        #balloonMenosMarcos,
+        #balloonTerremoto {
             position: fixed;
             top: 90px;
             right: 10px;
@@ -83,7 +91,8 @@
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Barriecito&display=swap" rel="stylesheet">
     <style>
-        #laserButton {
+        #laserButton,
+        #shakeButton {
             position: fixed;
             top: 10px;
             left: 10px;
@@ -97,8 +106,13 @@
             border: none;
             transition: transform 0.2s ease-in-out;
         }
+
+        #shakeButton {
+            left: 70px;
+        }
     </style>
 </head>
+
 <body>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -150,6 +164,7 @@
                         inputForm.style.display = 'none';
                         document.getElementById('counter').style.display = 'block';
                         document.getElementById('laserButton').style.display = 'block';
+                        document.getElementById('shakeButton').style.display = 'block';
                     }
                 });
 
@@ -163,18 +178,15 @@
                 }
             }
 
-          
-
             addButton.addEventListener('click', () => {
-    const clickSound = document.getElementById('clickSound');
-    clickSound.play();
-    addObject();
-    balloon.style.display = 'block';
-    setTimeout(() => {
-        balloon.style.display = 'none';
-    }, 1000);
-});
-
+                const clickSound = document.getElementById('clickSound');
+                clickSound.play();
+                addObject();
+                balloon.style.display = 'block';
+                setTimeout(() => {
+                    balloon.style.display = 'none';
+                }, 1000);
+            });
 
             document.getElementById('laserButton').addEventListener('mousedown', () => {
                 document.getElementById('laserButton').style.transform = 'scale(0.9)';
@@ -197,6 +209,75 @@
 
                     animateLaser(startX, startY, targetX, targetY, targetObject);
                 }
+                balloonMenosMarcos.style.display = 'block';
+                setTimeout(() => {
+                    balloonMenosMarcos.style.display = 'none';
+                }, 1000);
+            });
+
+            document.getElementById('shakeButton').addEventListener('mousedown', () => {
+                document.getElementById('shakeButton').style.transform = 'scale(0.9)';
+            });
+
+            document.getElementById('shakeButton').addEventListener('mouseup', () => {
+                document.getElementById('shakeButton').style.transform = 'scale(1)';
+            });
+
+            document.getElementById('shakeButton').addEventListener('click', () => {
+                const shakeSound = document.getElementById('objectClickSound');
+                shakeSound.play();
+                objects.forEach(obj => {
+                    obj.speedX += (Math.random() - 0.5) * 10;
+                    obj.speedY -= Math.random() * 10;
+                });
+
+                balloonTerremoto.style.display = 'block';
+                setTimeout(() => {
+                    balloonTerremoto.style.display = 'none';
+                }, 1000);
+            });
+
+            // Make canvas draggable
+            canvas.addEventListener('mousedown', (e) => {
+                objects.forEach((obj) => {
+                    if (
+                        e.offsetX >= obj.x &&
+                        e.offsetX <= obj.x + obj.width &&
+                        e.offsetY >= obj.y &&
+                        e.offsetY <= obj.y + obj.height
+                    ) {
+                        draggedObject = obj;
+                        offsetX = e.offsetX - obj.x;
+                        offsetY = e.offsetY - obj.y;
+                    }
+                });
+
+                if (
+                    e.offsetX >= textX - 50 &&
+                    e.offsetX <= textX + 50 &&
+                    e.offsetY >= textY - 20 &&
+                    e.offsetY <= textY + 20
+                ) {
+                    draggedText = true;
+                    textOffsetX = e.offsetX - textX;
+                    textOffsetY = e.offsetY - textY;
+                }
+            });
+
+            canvas.addEventListener('mousemove', (e) => {
+                if (draggedObject) {
+                    draggedObject.x = e.offsetX - offsetX;
+                    draggedObject.y = e.offsetY - offsetY;
+                }
+                if (draggedText) {
+                    textX = e.offsetX - textOffsetX;
+                    textY = e.offsetY - textOffsetY;
+                }
+            });
+
+            canvas.addEventListener('mouseup', () => {
+                draggedObject = null;
+                draggedText = false;
             });
         });
 
@@ -242,18 +323,37 @@
             }
         }
     </script>
-    <button id="laserButton"  style="display: none;" title="Laser Button">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Laser-symbol.svg/620px-Laser-symbol.svg.png" alt="Laser Icon" style="width: 32px; height: 32px; ">
+    <button id="laserButton" style="display: none;" title="Laser Button">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Laser-symbol.svg/620px-Laser-symbol.svg.png"
+            alt="Laser Icon" style="width: 32px; height: 32px; ">
+    </button>
+    <button id="shakeButton" style="display: none;" title="Shake Button">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a0/Earthquake_-_The_Noun_Project.svg"
+            alt="Shake Icon" style="width: 32px; height: 32px; ">
     </button>
     <div id="counter" style="display: none;">20 Marcos</div>
-    <img id="addButton" src="https://www.dropbox.com/scl/fi/4e8e0loo1yf80w09ysl3x/download__1___1_-removebg-preview.png?rlkey=lqw00bl3ca7r7ebgatd6re4or&st=9x1g6u1b&dl=1" alt="Adiciona Mais Marcos">
+    <img id="addButton"
+        src="https://www.dropbox.com/scl/fi/4e8e0loo1yf80w09ysl3x/download__1___1_-removebg-preview.png?rlkey=lqw00bl3ca7r7ebgatd6re4or&st=9x1g6u1b&dl=1"
+        alt="Adiciona Mais Marcos">
     <div id="balloon">Mais Marcos!</div>
+    <div id="balloonMenosMarcos">Laaasers !!!</div>
+    <div id="balloonTerremoto">Terremoto</div>
+
+
+
     <canvas id="canvas"></canvas>
     <script>
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         const addButton = document.getElementById('addButton');
         const balloon = document.getElementById('balloon');
+        const balloonMenosMarcos = document.getElementById('balloonMenosMarcos');
+        const balloonTerremoto = document.getElementById('balloonTerremoto');
+
+
+        balloonMenosMarcos.style.display = 'none';
+        balloonTerremoto.style.display = 'none';
+
         canvas.width = document.documentElement.clientWidth;
         canvas.height = document.documentElement.clientHeight;
 
@@ -273,7 +373,7 @@
         setInterval(() => {
             currentFontIndices = currentFontIndices.map(index => (index + 1) % fonts.length);
         }, 500);
-        
+
         let textY = canvas.height / 4;
         let textSpeedX = 2;
         let textSpeedY = 2;
@@ -329,7 +429,7 @@
                 ctx.fillText(char, offsetX, textY);
                 offsetX += ctx.measureText(char).width;
             });
-            
+
 
             if (!draggedText) {
                 textX += textSpeedX;
@@ -390,8 +490,15 @@
             requestAnimationFrame(animateExplosion);
         }
     </script>
-    <audio id="clickSound" src="https://cdn.pixabay.com/download/audio/2023/04/07/audio_25f18a716c.mp3?filename=arcade-arped-145549.mp3" preload="auto"></audio>
-    <audio id="objectClickSound" src="https://cdn.pixabay.com/download/audio/2023/04/30/audio_9ae1edb2a3.mp3?filename=video-game-menu-click-sounds-148373.mp3" preload="auto"></audio>
-    <audio id="laserSound" src="https://cdn.pixabay.com/download/audio/2024/08/30/audio_68d83e5b2d.mp3?filename=retro-laser-1-236669.mp3" preload="auto"></audio>
+    <audio id="clickSound"
+        src="https://cdn.pixabay.com/download/audio/2023/04/07/audio_25f18a716c.mp3?filename=arcade-arped-145549.mp3"
+        preload="auto"></audio>
+    <audio id="objectClickSound"
+        src="https://cdn.pixabay.com/download/audio/2023/04/30/audio_9ae1edb2a3.mp3?filename=video-game-menu-click-sounds-148373.mp3"
+        preload="auto"></audio>
+    <audio id="laserSound"
+        src="https://cdn.pixabay.com/download/audio/2024/08/30/audio_68d83e5b2d.mp3?filename=retro-laser-1-236669.mp3"
+        preload="auto"></audio>
 </body>
+
 </html>

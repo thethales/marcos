@@ -92,6 +92,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Barriecito&display=swap" rel="stylesheet">
     <style>
         #laserButton,
+        #cakeButton,
         #shakeButton {
             position: fixed;
             top: 10px;
@@ -110,6 +111,11 @@
         #shakeButton {
             left: 70px;
         }
+
+        #cakeButton {
+            left: 130px;
+        }
+
     </style>
 </head>
 
@@ -117,6 +123,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
+
             if (urlParams.get('ask') === '1') {
                 const inputForm = document.createElement('div');
                 inputForm.style.position = 'fixed';
@@ -165,6 +172,9 @@
                         document.getElementById('counter').style.display = 'block';
                         document.getElementById('laserButton').style.display = 'block';
                         document.getElementById('shakeButton').style.display = 'block';
+                        if (urlParams.get('cake') === 'true') {
+                            document.getElementById('cakeButton').style.display = 'block';
+                        }
                     }
                 });
 
@@ -172,6 +182,9 @@
                 inputForm.appendChild(inputField);
                 inputForm.appendChild(submitButton);
                 document.body.appendChild(inputForm);
+
+                
+
             } else {
                 for (let i = 0; i < 20; i++) {
                     addObject();
@@ -236,6 +249,14 @@
                     balloonTerremoto.style.display = 'none';
                 }, 1000);
             });
+            document.getElementById('cakeButton').addEventListener('click', () => {
+                addCakeGif();
+                const cakeSound = document.getElementById('cakeSound');
+                cakeSound.play();
+                
+            });
+
+          
 
             // Make canvas draggable
             canvas.addEventListener('mousedown', (e) => {
@@ -280,6 +301,17 @@
                 draggedText = false;
             });
         });
+
+        function addCakeGif() {
+            const cakeImage = new Image();
+            cakeImage.src = 'https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNWtsZDVyZ3E3d3Bha2V1dTR5bmxjMTRqbWYzZ2ttZjgyZGpka3Q5NyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/2dn1BqrVTs7zejxC9V/giphy.webp';
+            cakeImage.style.position = 'absolute';
+            cakeImage.style.top = Math.random() * (window.innerHeight - 100) + 'px';
+            cakeImage.style.left = Math.random() * (window.innerWidth - 100) + 'px';
+            cakeImage.style.width = '100px';
+            cakeImage.style.height = '100px';
+            document.body.appendChild(cakeImage);
+        }
 
         function animateLaser(startX, startY, targetX, targetY, targetObject) {
             let progress = 0;
@@ -330,6 +362,9 @@
     <button id="shakeButton" style="display: none;" title="Shake Button">
         <img src="https://upload.wikimedia.org/wikipedia/commons/a/a0/Earthquake_-_The_Noun_Project.svg"
             alt="Shake Icon" style="width: 32px; height: 32px; ">
+    <button id="cakeButton" style="display: none;" title="Cake Button">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Glucose.PNG"
+            alt="Cake Icon" style="height: 32px; ">
     </button>
     <div id="counter" style="display: none;">20 Marcos</div>
     <img id="addButton"
@@ -498,6 +533,9 @@
         preload="auto"></audio>
     <audio id="laserSound"
         src="https://cdn.pixabay.com/download/audio/2024/08/30/audio_68d83e5b2d.mp3?filename=retro-laser-1-236669.mp3"
+        preload="auto"></audio>
+    <audio id="cakeSound"
+        src="https://eta.vgmtreasurechest.com/soundtracks/portal/kpsfijlkjp/15.%20Still%20Alive%20%28Radio%20Mix%20Clean%29.mp3"
         preload="auto"></audio>
 </body>
 
